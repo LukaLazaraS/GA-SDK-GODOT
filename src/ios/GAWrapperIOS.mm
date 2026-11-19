@@ -352,6 +352,25 @@ namespace gameanalytics
                                 mergeFields:mergeFields];
     }
 
+    // AdMob impression-level revenue (one paid event): the impression data arrives as a JSON
+    // object string, parsed here as the Unity bridge does (GameAnalyticsUnity.m addImpressionEvent).
+    void GAWrapperIOS::AddImpressionAdMobEvent(std::string const& adNetworkVersion, std::string const& impressionJson) {
+        NSString *versionString = ToNSString(adNetworkVersion);
+        NSString *jsonString = ToNSString(impressionJson);
+        if (!jsonString) {
+            return;
+        }
+
+        NSError *error = nil;
+        id impressionData = [NSJSONSerialization JSONObjectWithData:[jsonString dataUsingEncoding:NSUTF8StringEncoding] options:kNilOptions error:&error];
+        if (error || ![impressionData isKindOfClass:[NSDictionary class]]) {
+            NSLog(@"GameAnalytics: addImpressionAdMobEvent: impression data is not a JSON object");
+            return;
+        }
+
+        [GameAnalytics addImpressionAdMobEventWithAdNetworkVersion:versionString impressionData:(NSDictionary *)impressionData];
+    }
+
     void GAWrapperIOS::SetInfoLog(bool flag) {
         [GameAnalytics setEnabledInfoLog:flag];
     }

@@ -73,6 +73,10 @@ namespace gameanalytics
         virtual void AddAdEventWithReason(EGAAdAction adAction, EGAAdType adType, std::string const& adSdkName, std::string const& adPlacement, EGAAdError noAdReason, std::string const& fields, bool mergeFields) = 0;
         virtual void AddAdEvent(EGAAdAction adAction, EGAAdType adType, std::string const& adSdkName, std::string const& adPlacement, std::string const& fields, bool mergeFields) = 0;
 
+        // AdMob impression-level revenue: implemented on iOS only. On Android the game calls the
+        // Java SDK's GameAnalytics.addImpressionAdMobEvent directly; elsewhere there is no impression API.
+        virtual void AddImpressionAdMobEvent(std::string const& adNetworkVersion, std::string const& impressionJson) {}
+
         virtual void SetInfoLog (bool enabled) = 0;
         virtual void SetVerboseLog (bool enabled) = 0;
 

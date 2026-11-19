@@ -104,6 +104,9 @@ public:
                     const String& adPlacement,
                     const Dictionary &options);
 
+    void addImpressionAdMobEvent(const String& adNetworkVersion,
+                                 const String& impressionJson);
+
     void setEnabledInfoLog(bool flag);
     void setEnabledVerboseLog(bool flag);
     void setEnabledManualSessionHandling(bool flag);

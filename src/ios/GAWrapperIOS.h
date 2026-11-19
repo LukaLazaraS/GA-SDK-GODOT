@@ -61,6 +61,8 @@ namespace gameanalytics
             virtual void AddAdEventWithReason(EGAAdAction adAction, EGAAdType adType, std::string const& adSdkName, std::string const& adPlacement, EGAAdError noAdReason, std::string const& fields, bool mergeFields) override;
             virtual void AddAdEvent(EGAAdAction adAction, EGAAdType adType, std::string const& adSdkName, std::string const& adPlacement, std::string const& fields, bool mergeFields) override;
 
+            virtual void AddImpressionAdMobEvent(std::string const& adNetworkVersion, std::string const& impressionJson) override;
+
             virtual void SetInfoLog(bool enabled) override;
             virtual void SetVerboseLog(bool enabled) override;
             

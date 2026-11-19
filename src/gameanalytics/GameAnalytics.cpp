@@ -471,6 +471,18 @@ void GameAnalytics::addAdEvent(
     }
 }
 
+// One AdMob paid event: impressionJson is GameAnalytics' AdMob impression data as a JSON object
+// (adunit_id, currency, precision, adunit_format, network_class_name, revenue in micros).
+void GameAnalytics::addImpressionAdMobEvent(const String& adNetworkVersion, const String& impressionJson)
+{
+    if(_impl)
+    {
+        const godot::CharString version = adNetworkVersion.utf8();
+        const godot::CharString json = impressionJson.utf8();
+        _impl->AddImpressionAdMobEvent(std::string(version.get_data(), version.length()), std::string(json.get_data(), json.length()));
+    }
+}
+
 void GameAnalytics::setEnabledInfoLog(bool flag)
 {
     if(_impl)
@@ -819,6 +831,7 @@ void GameAnalytics::_bind_methods()
     ClassDB::bind_method(D_METHOD("addDesignEvent", "eventId", "options"), &GameAnalytics::addDesignEvent);
     ClassDB::bind_method(D_METHOD("addErrorEvent", "severity", "message", "options"), &GameAnalytics::addErrorEvent);
     ClassDB::bind_method(D_METHOD("addAdEvent", "adAction", "adType", "adSdkName", "adPlacement", "options"), &GameAnalytics::addAdEvent);
+    ClassDB::bind_method(D_METHOD("addImpressionAdMobEvent", "adNetworkVersion", "impressionJson"), &GameAnalytics::addImpressionAdMobEvent);
     ClassDB::bind_method(D_METHOD("addDesignEventWithValue", "eventId", "value"), &GameAnalytics::addDesignEventWithValue);
     ClassDB::bind_method(D_METHOD("addProgressionEventWithScore", "status", "progression1", "progression2", "progression3", "score"), &GameAnalytics::addProgressionEventWithScore);
 
