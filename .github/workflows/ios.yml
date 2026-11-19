@@ -55,10 +55,12 @@ jobs:
           LIB=$(find bin/ios/libGodotGameAnalytics.ios.$CFG.xcframework -name '*.a' | head -1)
           # whole outputs to files first: grep -q closing a pipe early fails the step under pipefail
           nm -gU "$LIB" > symbols.txt
-          strings -a "$LIB" > strings.txt
+          nm -u "$LIB" > undefined.txt
           grep -q gameanalytics_init symbols.txt
           grep addImpressionAdMobEvent symbols.txt
-          grep -q 'addImpressionAdMobEventWithAdNetworkVersion:impressionData:' strings.txt
+          # the iOS SDK call: an objc_msgSend$<selector> stub symbol (clang's selector stubs) or a selector
+          # reference, either way the selector's name is in the archive
+          grep 'addImpressionAdMobEventWithAdNetworkVersion:impressionData:' undefined.txt || LC_ALL=C grep -a -c 'addImpressionAdMobEventWithAdNetworkVersion:impressionData:' "$LIB"
           shasum -a 256 $(find bin/ios -name '*.a')
           echo "artifact ok: $LIB"
 
